@@ -4,21 +4,7 @@
 #include <ctype.h>
 #define tf 100
 void levetor(int vetor[tf],int &tl);
-void ordenaV(int v[tf],int tl){
-	int i,j,menor,pos;
-	for(i=0;i<tl-1;i++){
-		menor=v[i];
-		pos=i;
-		for(j=i+1;j<tl;j++)
-			if(menor>v[j]){
-				menor=v[j];
-				pos=j;
-			}
-		v[pos]=v[i];
-		v[i]=menor;
-	}
-		
-}
+void ExibirV(int vetor[tf], int tl);
 int busca(int vet[tf],int tl,int x){
 	int pos=0;
 	while(pos<tl && vet[pos]!=x)
@@ -59,7 +45,76 @@ int soma(int vet[tf],int tl){
 		soma+=vet[i];
 	return soma;
 }
-
+int binario(int x){
+	int bin=0,mult=1;
+	while(x>0){
+		bin+=(x%2)*mult;
+		x/=2;
+		mult*=10;
+	}
+	return bin;
+}
+void Sub(int vet1[tf],int vet2[tf],int vet3[tf],int TL1,int TL2,int &TL3){
+	int i;
+	TL3=0;
+	for(i=0;i<TL1;i++){
+		if(busca(vet2,TL2,vet1[i])==-1)
+			if(busca(vet3,TL3,vet1[i])==-1)
+				vet3[TL3++]=vet1[i];
+	}
+}
+void Intersec(int vet1[tf],int vet2[tf],int vet3[tf],int TL1,int TL2,int &TL3){
+	int i;
+	TL3=0;
+	for(i=0;i<TL1;i++){
+		if(busca(vet2,TL2,vet1[i])>=0)
+			if(busca(vet3,TL3,vet1[i])==-1)
+				vet3[TL3++]=vet1[i];
+	}
+}
+void ordena(int v[tf],int tl){
+	int i,j,menor,pos;
+	for(i=0;i<tl-1;i++){
+		menor=v[i];
+		pos=i;
+		for(j=i+1;j<tl;j++)
+			if(v[j]<menor){
+				menor=v[j];
+				pos=j;
+			}
+		v[pos]=v[i];
+		v[i]=menor;
+	}
+}
+void Merge(int vet1[tf],int vet2[tf],int vet3[tf*2],int TL1,int TL2,int &TL3){
+	int i=0,j=0;
+	TL3=0;
+	ordena(vet1,TL1);
+	ordena(vet2,TL2);
+	while(i<TL1 && j<TL2){
+		if(vet1[i]<vet2[j]){
+			if(busca(vet3,TL3,vet1[i])==-1)
+				vet3[TL3++]=vet1[i];
+			i++;
+		}
+		else{
+			if(busca(vet3,TL3,vet2[j])==-1)
+				vet3[TL3++]=vet2[j];
+			j++;
+		}
+	}
+	while(i<TL1){
+		if(busca(vet3,TL3,vet1[i])==-1)
+			vet3[TL3++]=vet1[i];
+		i++;
+	}
+	while(j<TL2){
+		if(busca(vet3,TL3,vet2[j])==-1)
+			vet3[TL3++]=vet2[j];
+		j++;
+	}
+		
+}
 void Levetor(int vetor[tf],int &tl)
 {
 	int num;
@@ -77,37 +132,59 @@ void Levetor(int vetor[tf],int &tl)
 		
 	}while(tl<tf&&num>0);
 }
+void Exer_5(int vet1[tf],int TL1,int vet2[tf],int &TL2,int vet3[tf],int TL3){
+	Levetor(vet2,TL2);
+	clrscr();
+	printf("## Vetores ##\n\n");
+	printf("Vet1: [");
+	ExibirV(vet1,TL1);
+	printf("Vet2: [");
+	ExibirV(vet2,TL2);
 
+	Sub(vet1,vet2,vet3,TL1,TL2,TL3);
+	printf("\n[A] Vet3: [");
+	ExibirV(vet3,TL3);
+	Intersec(vet1,vet2,vet3,TL1,TL2,TL3);
+	printf("\n[B] Vet3: [");
+	ExibirV(vet3,TL3);
+	Merge(vet1,vet2,vet3,TL1,TL2,TL3);
+	printf("\n[C] Vet3: [");
+	ExibirV(vet3,TL3);
+	getch();
+	
+}
 char menu()
 {
 	clrscr();
-	printf("\n## Menu ##\n");
+	printf("## Menu ##\n\n");
 	printf("[A]Ler Vetor\n");
 	printf("[B]Exibir Vetor\n");
 	printf("[C]Frequencia\n");
-	printf("[D]Consultar Elemento\n");
-	printf("[E]Ordenar Vetor\n");
-	printf("[F]Excluir Elemento\n");
+	printf("[D]Soma\n");
+	printf("[E]Consultar Elemento\n");
+	printf("[F]IntToBin\n");
+	printf("[G]Exercicio 5\n");
+	printf("[J]Ordenar Vetor\n");
+	printf("[K]Excluir Elemento\n");
 	printf("[ESC]Sair\n");
 	printf("\nOpcao: ");
 	
 	return toupper(getch());
 }
 void ExibirV(int vetor[tf], int tl){
-	clrscr();
-	printf("## Conteudo do vetor ##\n\n");
+	
+	
 	if(tl==0)
 		printf("Vetor Vazio!");
-	else{
-		printf("Vetor: [");
+	else{	
 		for(int i=0;i<tl-1;i++)
 			printf("%d ,",vetor[i]);
 		printf("%d]\n",vetor[tl-1]);
 	}
-	getch();
 }
 void executar(){
 	int v[tf],tam=0,numais,qtde,num;
+	int v2[tf],tam2=0,v3[tf*2],tam3=0;
 	char tecla;
 	
 	do{
@@ -123,7 +200,15 @@ void executar(){
 				getch();	
 				break;
 			case 'B':
-				ExibirV(v,tam);
+				clrscr();
+				printf("## Conteudo do vetor ##\n\n");
+				if(tam==0)
+					printf("Vetor Vazio!");
+				else{
+					printf("Vetor: [");
+					ExibirV(v,tam);
+				}
+				getch();
 				break;
 			case 'C':
 				if(tam==0)
@@ -132,10 +217,19 @@ void executar(){
 					frequencia(v,tam,numais,qtde);
 					printf("\nNumero de maior frequencia e: %d",numais);
 					printf("\nQuantidade de vezes e: %d\n",qtde);
-					getch();
 				}
+				getch();
 				break;
 			case 'D':
+				if(tam==0)
+					printf("Vetor Vazio!");
+				else{
+					num=soma(v,tam);
+					printf("\nSoma: %d",num);
+				}
+				getch();
+				break;
+			case 'E':
 				if(tam==0)
 					printf("Vetor Vazio!");
 				else{
@@ -150,12 +244,25 @@ void executar(){
 				}
 				getch();
 				break;
-			case 'E':
+			case 'F':
+				clrscr();
+				printf("Numero para a consulta: ");
+				scanf("%d",&num);
+				printf("Numero transformado: %d",binario(num));
+				getch();
+				break;
+			case 'G':
 				if(tam==0)
 					printf("Vetor Vazio!");
-				else{
-					ordenaV(v,tam);
-				}
+				else
+					Exer_5(v,tam,v2,tam2,v3,tam3);
+				getch();
+				break;
+			case 'J':
+				if(tam==0)
+					printf("Vetor Vazio!");
+				else
+					ordena(v,tam);
 				break;
 		}
 		
@@ -165,9 +272,6 @@ void executar(){
 int main(void)
 {
 	executar();
-	
-	
-	
 	
 	return 0;
 }
