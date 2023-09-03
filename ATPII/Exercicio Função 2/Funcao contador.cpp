@@ -20,24 +20,16 @@ void frequencia(int vetor[tf],int tl,int &valor,int &qtdevezes)
 	int i,j,cont=1;
 	qtdevezes=0;
 	clrscr();
-	for(i=0;i<tl-1;i++)
-	{
+	for(i=0;i<tl-1;i++){
 		cont=1;
 		for(j=i+1;j<tl;j++)
-		{
 			if(vetor[i]==vetor[j])
-			{
 				cont++;
-			}	
-		}
-		
-		if(cont>qtdevezes)
-		{
+		if(cont>qtdevezes){
 			qtdevezes=cont;
 			valor=vetor[i];
 		}
 	}
-	
 }
 int soma(int vet[tf],int tl){
 	int soma=0;
@@ -150,8 +142,6 @@ void Exer_5(int vet1[tf],int TL1,int vet2[tf],int &TL2,int vet3[tf],int TL3){
 	Merge(vet1,vet2,vet3,TL1,TL2,TL3);
 	printf("\n[C] Vet3: [");
 	ExibirV(vet3,TL3);
-	getch();
-	
 }
 char menu()
 {
