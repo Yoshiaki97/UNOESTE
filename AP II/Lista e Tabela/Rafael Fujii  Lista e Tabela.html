@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio</title>
+    <style type="text/css">
+        .lista1{
+            list-style:lower-roman;
+            margin: 0 auto;
+            text-align: justify;
+            width: 10%;
+        }
+        body{
+            font-family: cursive;
+        }
+        .borda td{
+            border: 2px solid black;
+            border-radius: 20px;
+        }
+        .alinha{
+            text-align: center;
+            margin: 0 auto;
+            width: 550px;
+        }
+        .cor1 tr:nth-child(3n+1){background-color:rgb(255, 251, 197)}
+        .cor1 tr:nth-child(3n+2){background-color:gray}
+        .cor1 tr:nth-child(3n+3){background-color:aqua}
+        .nome{
+            background-color:aqua;
+            text-align: justify;
+            font-size: 20px;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h3 style="text-align: center;">*** Listas ***</h3>
+    <ul class="lista1">
+        <li>W3C</li>
+        <li>HTML</li>
+        <li>CSS</li>
+            <ol style="list-style: circle;">
+                <li>HTML</li>
+                <li>HTML</li>
+                <li>HTML</li>
+            </ol>
+        <li>Web Semântica</li>
+        <li>UX Design</li>
+        <li>Web Acessível</li>
+    </ul>
+    <table class="borda alinha">
+        <tr>
+            <td>Faculdade de Informática de Presidente Prudente - FIPP 👍👍👍👍</td>
+        </tr>
+    </table>
+    <br>
+    <table class="borda alinha cor1">
+        <caption>Nuvem de palavras</caption>
+        <tr>
+            <td colspan="2">Atitude</td>
+            <td>Colaboração</td>
+            <td rowspan="3">Estudo</td>
+        </tr>
+        <tr>
+            <td>Humildade</td>
+            <td>Dedicação</td>
+            <td>Motivação</td>
+        </tr>
+        <tr>
+            <td>Educação</td>
+            <td colspan="2">Comprometimento</td>
+
+        </tr>
+        <tr>
+            <td colspan="4">Responsabilidade</td>
+        </tr>
+        <tr>
+            <td colspan="2">FIPP</td>
+            <td colspan="2">UNOESTE</td>
+        </tr>
+    </table>
+    <br>
+    <table class="alinha nome">
+        <tr>
+            <td>Aluno(a): Rafael M Y Fujii</td>
+            <td>RA: 026.23.1907-1</td>
+        </tr>
+    </table>
+</body>
+</html>
