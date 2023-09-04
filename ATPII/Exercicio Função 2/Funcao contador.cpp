@@ -14,12 +14,11 @@ int busca(int vet[tf],int tl,int x){
 	else
 		return -1;
 }
-
 void frequencia(int vetor[tf],int tl,int &valor,int &qtdevezes)
 {
 	int i,j,cont=1;
 	qtdevezes=0;
-	clrscr();
+	
 	for(i=0;i<tl-1;i++){
 		cont=1;
 		for(j=i+1;j<tl;j++)
@@ -201,6 +200,8 @@ void executar(){
 				getch();
 				break;
 			case 'C':
+				clrscr();
+				printf("## Frequencia ##\n\n");
 				if(tam==0)
 					printf("Vetor Vazio!");
 				else{
@@ -211,6 +212,8 @@ void executar(){
 				getch();
 				break;
 			case 'D':
+				clrscr();
+				printf("## SOMA ##\n\n");
 				if(tam==0)
 					printf("Vetor Vazio!");
 				else{
@@ -220,10 +223,11 @@ void executar(){
 				getch();
 				break;
 			case 'E':
+				clrscr();
+				printf("## Numero para Consulta ##\n\n");
 				if(tam==0)
 					printf("Vetor Vazio!");
 				else{
-					clrscr();
 					printf("Numero para a consulta: ");
 					scanf("%d",&num);
 					int x=busca(v,tam,num);
@@ -236,7 +240,8 @@ void executar(){
 				break;
 			case 'F':
 				clrscr();
-				printf("Numero para a consulta: ");
+				printf("## Decimal para Binario ##\n\n");
+				printf("Numero em Decimal: ");
 				scanf("%d",&num);
 				printf("Numero transformado: %d",binario(num));
 				getch();
