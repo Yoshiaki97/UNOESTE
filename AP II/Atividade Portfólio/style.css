@@ -1,0 +1,86 @@
+body{
+    background-color: #212529;
+    color: #899095;
+}
+*{font-family:garamond;font-size:  25px;}
+#principal{
+    width:1100px;
+    margin:0 auto;
+}
+#topo{
+    width:100%;
+    margin:0 auto;
+    height:50px;
+    
+    border-bottom: 1px solid gray;
+    
+}
+#menu{
+    width: 100px;
+    height: 630px;
+    background-color: #37383a;
+    float:left;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding-top: 20px;
+    text-align:center;
+}
+#conteudo{
+    width: 945px;
+    height:650px;
+    background-color: #37383a;
+    float:left;
+    overflow:auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 20px;
+    position: flex; 
+    border: 1px solid black;
+    border-radius: 10px;
+}
+#rodape{
+    width:100%;
+    height:50px;
+    background-color: #37383a;
+    color:white;
+    float:left;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+}
+.esquerda{
+    text-align:left;
+}
+.alinha{
+    margin: 0 auto;
+}
+aside h1,h2{color: #afaaaa;}
+
+.botao li{
+    color:white;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 5px 50px 5px 50px;
+    position: relative; 
+    display: inline;
+    background-color: rgba(55, 56, 58, 0);
+    transition: background-color 0.5s ease;
+}
+
+.imagem {
+    position:static;
+    padding-top: 35px;
+    padding-left: 30px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+.botao li:hover + figure .imagem {
+    opacity: 1;
+}
+.botao li:hover{
+    background-color: rgba(55, 56, 58, 1);
+    
+}
