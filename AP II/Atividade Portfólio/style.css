@@ -2,9 +2,9 @@ body{
     background-color: #212529;
     color: #899095;
 }
-*{font-family:garamond;font-size:  25px;}
+*{font-family:garamond;font-size:  20px;}
 #principal{
-    width:1100px;
+    width:800px;
     margin:0 auto;
 }
 #topo{
@@ -29,11 +29,11 @@ body{
     text-align:center;
 }
 #conteudo{
-    width: 945px;
+    width: 645px;
     height:650px;
     background-color: #37383a;
     float:left;
-    overflow:auto;
+
     padding-left: 20px;
     padding-right: 20px;
     margin-top: 20px;
@@ -76,6 +76,7 @@ aside h1,h2{color: #afaaaa;}
     padding-left: 30px;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+    z-index: 2;
 }
 .botao li:hover + figure .imagem {
     opacity: 1;
