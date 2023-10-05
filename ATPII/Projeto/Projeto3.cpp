@@ -18,7 +18,7 @@ struct TpProduto{
 struct TpFornecedor{
 	int cod;
 	char nome[30];
-	char cidade[20];
+	char cidade[30];
 };
 struct TpCliente{
 	char cpf[15];
@@ -1263,7 +1263,11 @@ void CadastroVendas(TpVendas v[tf],TpVendasP vp[tf],TpCliente c[tf],int &tlv,int
 	int pos,pos2,i=8,cod,pos1,qtde,num,ext,venda;
 	float total;
 	
+	time_t t;
+	t = time(NULL);
 	tm tempo;
+	tempo= *localtime(&t);
+	
 	apagar(1);//MENU
 	apagar(4);//titulo
 	gotoxy(3,3),printf("<[  MENU  >>  VENDAS  >>  CADASTRO  ]>");
@@ -1289,14 +1293,18 @@ void CadastroVendas(TpVendas v[tf],TpVendasP vp[tf],TpCliente c[tf],int &tlv,int
 				getch();
 			}
 			else{
-				venda=0;
-				v[tlv].cod=v[tlv-1].cod+1;
+				if(tlv==0)
+					v[tlv].cod=1;
+				else
+					v[tlv].cod=v[tlv-1].cod+1;
+					
 				num=v[tlv].cod;
 				strcpy(v[tlv].cpf,cpf);
 				gotoxy(30,i++),printf("Codigo do Produto: ");
 				scanf("%d",&cod);
 				apagar(3);//msg
 				while((tlv<tf || tlvP<tf) && cod!=0){
+					venda=0;
 					pos1=buscaProduto(x,tlp,cod);
 					if(pos1<tlp){
 						pos2=buscaCodVenda(vp,tlvP,cod,num);
@@ -1361,15 +1369,14 @@ void CadastroVendas(TpVendas v[tf],TpVendasP vp[tf],TpCliente c[tf],int &tlv,int
 				if(venda==1){
 					v[tlv].total=total;
 					v[tlv].data.d=tempo.tm_mday;
-					v[tlv].data.m=tempo.tm_mon;
-					v[tlv].data.a=tempo.tm_year;
+					v[tlv].data.m=tempo.tm_mon+1;
+					v[tlv].data.a=tempo.tm_year+1900;
 					c[pos].total+=total;
 					c[pos].qtde++;
 					tlv++;
 					ext = buscaVendas(v, tlv, tlv);
 					PrintCupom(v, c, vp, x, tlv, tlc, tlvP, tlp,tlv,ext);
-				}
-				
+				}	
 			}
 			apagar(2);
 			i=8;
@@ -1476,12 +1483,14 @@ void PaginaCupom(int &i){
 	i=8;
 }
 void PrintCupom(TpVendas v[tf], TpCliente c[tf], TpVendasP vp[tf], TpProduto p[tf], int TLV, int TLC, int TLVP, int TLP,int cod,int ext){
-	int i = 8, pos, it;
+	int i = 8, pos, pos1, it;
 	float tot;
 	pos = buscaCliente(c, TLC,v[ext].cpf);
 	apagar(2);//tela
 	gotoxy(44,6),printf("* * Cupom Fiscal * *");
-	gotoxy(30,i++),printf("Nome: %s",c[pos].nome);
+	pos1=buscaVendas(v,TLV,cod);
+	gotoxy(30,i),printf("Nome: %s",c[pos].nome);
+	gotoxy(62,i++),printf("Data: %d/%d/%d",v[pos1].data.d,v[pos1].data.m,v[pos1].data.a);
 	gotoxy(30,i++),printf("CPF: %s",c[pos].cpf),i++;
 	gotoxy(30,i++),printf("CUPOM FISCAL");
 	gotoxy(30,i++),printf("-----------------------------------------------");
@@ -1840,6 +1849,8 @@ void MenuPrincipal(void){
 	printf("[C] Clientes ");
 	gotoxy(3,12);
 	printf("[D] Vendas ");
+	gotoxy(3,13);
+	printf("[E] Inserir Dados ");
 	gotoxy(3,20);
 	printf("[ESC] Sair");
 	gotoxy(3,23);
@@ -1850,77 +1861,107 @@ char Formulario(void){
 	apagar(2);
 	apagar(3);//msg
 	apagar(4);//titulo
-	Moldura(1,1,80,25,5,0);
+	Moldura(1,1,80,25,10,0);
 	gotoxy(3,3);
 	textcolor(15);
 	printf("<[  MENU  ]>");
-	Moldura(2,2,79,4,5,0);
-	Moldura(2,5,27,21,5,0);
+	Moldura(2,2,79,4,10,0);
+	Moldura(2,5,27,21,10,0);
 	MenuPrincipal();
-	Moldura(2,22,79,24,5,0);
+	Moldura(2,22,79,24,10,0);
 	gotoxy(4,23);
 	textcolor(15);
-	Moldura(28,5,79,21,5,0);
+	Moldura(28,5,79,21,10,0);
 	gotoxy(22,23);
 	return toupper(getch());
 }
-/*void InsercaoDados(TpCliente x[tf],int &tl){
-	x[0]={"159.357.654-52","Armelinda",11,1982.54};
+void InserirCliente(TpCliente x[tf],int &tl,char cpf[15],char nome[30],int qtde,float total){
+	strcpy(x[tl].cpf,cpf);
+	strcpy(x[tl].nome,nome);
+	x[tl].qtde=qtde;
+	x[tl].total=total;
 	tl++;
-}*/
+}
+void InserirProduto(TpProduto x[tf],int &tl,int cod,char descr[20],int est,float preco,int d,int m,int a,int forn){
+	x[tl].cod=cod;
+	strcpy(x[tl].descr,descr);
+	x[tl].est=est;
+	x[tl].preco=preco;
+	x[tl].data.d=d;
+	x[tl].data.m=m;
+	x[tl].data.a=a;
+	x[tl].forn=forn;
+	tl++;
+}
+void InserirFornecedor(TpFornecedor x[tf],int &tl,int cod,char nome[30],char cidade[30]){
+	x[tl].cod=cod;
+	strcpy(x[tl].nome,nome);
+	strcpy(x[tl].cidade,cidade);
+	tl++;
+}
+void InserirVendas(TpVendas x[tf],int &tl,int cod,char cpf[15],int d,int m,int a,float total){
+	x[tl].cod=cod;
+	strcpy(x[tl].cpf,cpf);
+	x[tl].data.d=d;
+	x[tl].data.m=m;
+	x[tl].data.a=a;
+	x[tl].total=total;
+	tl++;
+}
+void InserirVendasP(TpVendasP x[tf],int &tl,int codV,int codP,int qtde,float preco){
+	x[tl].codV=codV;
+	x[tl].codP=codP;
+	x[tl].preco=preco;
+	x[tl].qtde=qtde;
+	tl++;
+}
+void InsercaoDados(TpVendas v[tf], TpCliente c[tf], TpVendasP vp[tf], TpProduto p[tf],TpFornecedor f[tf],int &TLF, int &TLV, int &TLC, int &TLVP, int &TLP,int &dados){
+	InserirCliente(c,TLC,"132.456.987-44","Windislaisson",1,64.60);
+	InserirCliente(c,TLC,"651.325.984-77","Astolfo",1,457.48);
+	InserirCliente(c,TLC,"159.357.654-52","Armelinda",1,392.64);
+	InserirCliente(c,TLC,"544.544.999-00","Katarina",0,0);
+	
+	InserirProduto(p,TLP,7000,"Lasanha",52,9.98,10,9,2024,200);
+	InserirProduto(p,TLP,1000,"Suco",188,1.62,15,05,2025,500);
+	InserirProduto(p,TLP,4000,"Biscoito",63,4.56,22,11,2024,300);
+	InserirProduto(p,TLP,3000,"Farofa",30,3.80,22,11,2024,300);
+	
+	InserirFornecedor(f,TLF,200,"Fabricia Matao","Matao");
+	InserirFornecedor(f,TLF,500,"Sapore S.A.","Campinas");
+	InserirFornecedor(f,TLF,300,"Basteck","Guarapuava");
+	
+	InserirVendas(v,TLV,1,"651.325.984-77",10,8,2023,457.48);
+	InserirVendas(v,TLV,2,"132.456.987-44",15,7,2023,45.60);
+	InserirVendas(v,TLV,3,"159.357.654-52",06,4,2023,251.66);
+	InserirVendas(v,TLV,4,"132.456.987-44",30,11,2023,19.00);
+	
+	InserirVendasP(vp,TLVP,1,1000,10,1.62);
+	InserirVendasP(vp,TLVP,1,7000,20,9.98);
+	InserirVendasP(vp,TLVP,1,4000,53,4.56);
+	InserirVendasP(vp,TLVP,2,4000,10,4.56);
+	InserirVendasP(vp,TLVP,3,7000,1,9.98);
+	InserirVendasP(vp,TLVP,3,4000,53,4.56);
+	InserirVendasP(vp,TLVP,4,3000,5,3.80);
+	/*InserirVendasP(vp,TLVP,4,4000,1,4.56);
+	InserirVendasP(vp,TLVP,4,4000,1,4.56);
+	InserirVendasP(vp,TLVP,4,4000,1,4.56);
+	InserirVendasP(vp,TLVP,4,4000,1,4.56);
+	InserirVendasP(vp,TLVP,4,4000,1,4.56);
+	InserirVendasP(vp,TLVP,4,4000,1,4.56);
+	InserirVendasP(vp,TLVP,4,4000,1,4.56);*/
+	apagar(3);//msg
+	gotoxy(3,23),printf("Dados Inseridos !");
+	dados=1;
+	getch();
+	apagar(3);//msg
+}
 void executar(){
-	TpCliente cliente[tf]={"132.456.987-44","Windislaisson",5,2841.63,
-						   "651.325.984-77","Astolfo",2,1450.25,
-						   "159.357.654-52","Armelinda",11,1982.54,
-						   "544.544.999-00","Katarina",0,0};
-	TpProduto produto[tf]={7000,"Lasanha",52,9.98,10,9,2024,200,
-						   1000,"Suco",188,1.62,15,05,2025,500,
-						   4000,"Biscoito",63,4.56,22,11,2024,300,
-						   3000,"Farofa",30,3.80,22,11,2024,300,};
-	TpFornecedor fornecedor[tf]={200,"Fabricia Matao","Matao",
-								 500,"Sapore S.A.","Campinas",
-								 300,"Basteck","Guarapuava"};
-	TpVendas vendas[tf]={1,"651.325.984-77",10,8,2023,457.48,
-						 2,"132.456.987-44",15,7,2023,45.60,
-						 3,"159.357.654-52",06,04,2023,392.64};
-	TpVendasP vendasP[tf]={1,1000,10,1.62,
-						   1,7000,20,9.98,
-						   1,4000,53,4.56,
-						   2,4000,10,4.56,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,3,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,1000,1,1.62,
-						   3,7000,2,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,1000,1,1.62,
-						   3,7000,1,9.98,
-						   3,7000,3,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,2,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,4,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   3,7000,1,9.98,
-						   };
-	int tl_cliente=4,tl_produto=4,tl_fornecedor=3,tl_vendas=3,tl_vendasP=36;
+	TpCliente cliente[tf];
+	TpProduto produto[tf];
+	TpFornecedor fornecedor[tf];
+	TpVendas vendas[tf];
+	TpVendasP vendasP[tf];
+	int tl_cliente=0,tl_produto=0,tl_fornecedor=0,tl_vendas=0,tl_vendasP=0,dados=0;
 	
 	char tecla,op;
 	do{
@@ -2023,6 +2064,16 @@ void executar(){
 						break;
 					case 'D':
 						RelatorioVendas(vendas, cliente, vendasP, produto,fornecedor,tl_fornecedor, tl_vendas,tl_cliente, tl_vendasP, tl_produto);
+				}
+				break;
+			case 'E':
+				if(dados==0)
+					InsercaoDados(vendas, cliente, vendasP, produto,fornecedor,tl_fornecedor, tl_vendas,tl_cliente, tl_vendasP, tl_produto,dados);
+				else{
+					apagar(3);//msg
+					gotoxy(3,23),printf("Os Dados Ja Foram Inseridos !");
+					getch();
+					apagar(3);//msg
 				}
 		}
 	}while(tecla!=27);
